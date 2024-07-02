@@ -4,6 +4,8 @@ import Registration from './pages/Registration/Registration';
 import Login from './pages/Login/Login';
 import { googleClientId } from './config';
 import { gapi } from 'gapi-script';
+import Profile from './pages/Profile/Profile';
+import EditProfile from './pages/Edit profile/EditProfile';
 
 const App: React.FC = () => {
   // Funkcija za podešavanje za google autentifikaciju
@@ -22,6 +24,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
       </Routes>
     </Router>
   );
