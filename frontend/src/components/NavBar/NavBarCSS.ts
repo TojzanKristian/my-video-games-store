@@ -1,5 +1,4 @@
 const navBarStyle: React.CSSProperties = {
-    position: 'fixed',
     top: 50,
     padding: '10px 0 0 0',
     width: '100%'
