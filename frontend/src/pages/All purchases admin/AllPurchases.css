@@ -1,0 +1,70 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
+
+.store-name {
+    font-size: 25px;
+}
+
+.icons {
+    display: flex;
+    gap: 30px;
+}
+
+.icon {
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.main-content-allPurchases {
+    padding: 20px 10px 10px 10px;
+    width: 100%;
+}
+
+.titleStyle {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.thStyle {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid #fff;
+}
+
+.tdStyle {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #fff;
+}
+
+.footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
