@@ -7,6 +7,10 @@ import { gapi } from 'gapi-script';
 import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/Edit profile/EditProfile';
 import MyGames from './pages/My games/MyGames';
+import AllUsers from './pages/All users admin/AllUsers';
+import AllPurchases from './pages/All purchases admin/AllPurchases';
+import AddNewGame from './pages/Add new game admin/AddNewGame';
+import AllGames from './pages/All games admin/AllGames';
 
 const App: React.FC = () => {
   // Funkcija za podešavanje za google autentifikaciju
@@ -28,6 +32,10 @@ const App: React.FC = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/my-games" element={<MyGames />} />
+        <Route path="/all-users" element={<AllUsers />} />
+        <Route path="/all-purchases" element={<AllPurchases />} />
+        <Route path="/all-games" element={<AllGames />} />
+        <Route path="/add-new-game" element={<AddNewGame />} />
       </Routes>
     </Router>
   );
