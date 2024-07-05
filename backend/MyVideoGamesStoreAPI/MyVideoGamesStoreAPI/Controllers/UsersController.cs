@@ -41,5 +41,25 @@ namespace MyVideoGamesStoreAPI.Controllers
             _logger.LogInformation(message);
             return Ok(new { message = "Uspešna registracija!" });
         }
+
+        /// <summary>
+        /// POST method.
+        /// Handles user registration/login via Google account.
+        /// Obrada zahteva za registraciju/prijavu Google nalogom.
+        /// </summary>
+        /// <param name="request">The request model containing user details.</param>
+        /// <returns>An IActionResult indicating the result of the registration.</returns>
+        [HttpPost("googleAccountLogin")]
+        public IActionResult GoogleAccountLogin([FromBody] GoogleAccModelRequest request)
+        {
+            string debugMessage = $"\nGoogle login details:\n" +
+            $"\t\tUserName: {request.UserName}\n" +
+            $"\t\tFirstName: {request.FirstName}\n" +
+            $"\t\tLastName: {request.LastName}\n" +
+            $"\t\tEmail: {request.Email}\n";
+
+            Debug.WriteLine(debugMessage);
+            return Ok(new { message = "Uspešna prijava Google nalogom!" });
+        }
     }
 }
