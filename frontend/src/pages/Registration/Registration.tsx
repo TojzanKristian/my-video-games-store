@@ -6,6 +6,7 @@ import { IUser } from "../../interfaces/IUser";
 import { ICountry } from "../../interfaces/ICountry";
 import { GoogleLogin } from 'react-google-login';
 import { googleClientId } from '../../config'
+import RegistrationService from "../../services/Registration/RegistrationService";
 
 const Registration: React.FC = () => {
 
@@ -100,7 +101,8 @@ const Registration: React.FC = () => {
         }
         else {
             try {
-                console.log(user);
+                const response = await RegistrationService.registerUser(user);
+                alert(response.message)
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -112,7 +114,7 @@ const Registration: React.FC = () => {
         if (response.profileObj) {
             const { name, email, familyName, givenName } = response.profileObj;
             try {
-                //const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
+                const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
                 if (response.message === '2') {
                     alert('Uspešno ste se registrovali!');
                 }
@@ -137,6 +139,7 @@ const Registration: React.FC = () => {
         console.error('Došlo je do greške pri prijavi na Google nalog:', error);
     };
 
+    // Funkcija za obradu promene kod odabira države
     const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(event.target.value);
         setCountry(event.target.value);
@@ -190,7 +193,7 @@ const Registration: React.FC = () => {
                                             ))}
                                         </select>
                                         {selectedCountry && (
-                                            <img src={countries.find(c => c.name === selectedCountry)?.flag} alt={`${selectedCountry} flag`} style={{ width: '30px', marginLeft: '10px' }} />
+                                            <img src={countries.find(c => c.name === selectedCountry)?.flag} alt={`${selectedCountry} flag`} style={{ width: '50px', marginLeft: '10px' }} />
                                         )}
                                     </div>
                                 </td>
