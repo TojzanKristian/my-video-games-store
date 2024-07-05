@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Requests\**" />
-    <Content Remove="Requests\**" />
-    <EmbeddedResource Remove="Requests\**" />
-    <None Remove="Requests\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
