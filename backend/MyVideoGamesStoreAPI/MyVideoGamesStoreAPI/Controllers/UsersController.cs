@@ -61,5 +61,24 @@ namespace MyVideoGamesStoreAPI.Controllers
             Debug.WriteLine(debugMessage);
             return Ok(new { message = "Uspešna prijava Google nalogom!" });
         }
+
+        /// <summary>
+        /// POST method.
+        /// Handles user login.
+        /// Obrada zahteva za prijavu.
+        /// </summary>
+        /// <param name="model">The request model containing login details.</param>
+        /// <returns>An IActionResult indicating the result of the login.</returns>
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest model)
+        {
+            string message = $"\nLogin details:\n" +
+                      $"\t\tEmail: {model.Email}\n" +
+                      $"\t\tPassword: {model.Password}\n";
+
+            Debug.WriteLine(message);
+            _logger.LogInformation(message);
+            return Ok(new { message = "Uspešna prijava!" });
+        }
     }
 }
