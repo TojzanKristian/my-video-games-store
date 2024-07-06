@@ -4,6 +4,8 @@ import './Login.css'
 import { ILoginModel } from '../../interfaces/ILoginModel';
 import { GoogleLogin } from 'react-google-login';
 import { googleClientId } from '../../config'
+import LoginService from '../../services/Login/LoginService';
+import RegistrationService from '../../services/Registration/RegistrationService';
 
 const Login = () => {
 
@@ -24,7 +26,8 @@ const Login = () => {
         }
         else {
             try {
-                console.log(loggedUser);
+                const response = await LoginService.loginUser(loggedUser);
+                alert(response.message);
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -34,10 +37,9 @@ const Login = () => {
     // Funkcija za obradu uspešne prijave sa google nalogom
     const handleGoogleLoginSuccess = async (response: any) => {
         if (response.profileObj) {
-            console.log('Google !')
             const { name, email, familyName, givenName } = response.profileObj;
             try {
-                //const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
+                const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
                 if (response.message === '2') {
                     alert('Uspešno ste se registrovali!');
                 }
