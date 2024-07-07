@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyVideoGamesStoreAPI.Models;
 using MyVideoGamesStoreAPI.Requests;
 using System.Diagnostics;
 
@@ -79,6 +80,46 @@ namespace MyVideoGamesStoreAPI.Controllers
             Debug.WriteLine(message);
             _logger.LogInformation(message);
             return Ok(new { message = "Uspešna prijava!" });
+        }
+
+        /// <summary>
+        /// GET method.
+        /// Retrieves user profile data.
+        /// Dobavljanje podataka o korisniku.
+        /// </summary>
+        /// <returns>An IActionResult containing the user profile data if successful, or a BadRequest if not.</returns>
+        [HttpGet("profile")]
+        public IActionResult GetProfileData()
+        {
+            var data = new User()
+            {
+                FirstName = "John",
+                LastName = "Don",
+                UserName = "JD",
+                Email = "jd@gmail.com",
+                Password = "",
+                DateOfBirth = "11.08.2024",
+                Country = "Serbia",
+                PhoneNumber = "062789521369"
+            };
+
+            if (data != null)
+            {
+                string message = $"\nProfile details:\n" +
+                          $"\t\tFirstName: {data.FirstName}\n" +
+                          $"\t\tLastName: {data.LastName}\n" +
+                          $"\t\tUserName: {data.UserName}\n" +
+                          $"\t\tEmail: {data.Email}\n" +
+                          $"\t\tPassword: {data.Password}\n" +
+                          $"\t\tDateOfBirth: {data.DateOfBirth}\n" +
+                          $"\t\tCountry: {data.Country}\n" +
+                          $"\t\tPhoneNumber: {data.PhoneNumber}";
+
+                Debug.WriteLine(message);
+                _logger.LogInformation(message);
+                return Ok(data);
+            }
+            return BadRequest();
         }
     }
 }
