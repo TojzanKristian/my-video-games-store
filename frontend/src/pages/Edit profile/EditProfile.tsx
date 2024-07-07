@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { ICountry } from "../../interfaces/ICountry";
 import { IUser } from "../../interfaces/IUser";
+import ProfileService from "../../services/Profile/ProfileService";
 
 const EditProfile: React.FC = () => {
 
@@ -22,16 +23,16 @@ const EditProfile: React.FC = () => {
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
     const [country, setCountry] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
-    const editedUser: IUser = {
+    const [userData, setUserData] = useState<IUser>({
         firstName,
         lastName,
         userName,
         email,
-        password: newPassword,
+        password: oldPassword,
         dateOfBirth,
         country,
         phoneNumber
-    };
+    });
 
     useEffect(() => {
         // Funkcija za dobavljanje svih postojećih država
@@ -49,29 +50,70 @@ const EditProfile: React.FC = () => {
             }
         };
 
+        // Funkcija za dobavljanje podataka o korisniku sa servera
+        const fetchData = async () => {
+            try {
+                const response = await ProfileService.getProfileData();
+                if (response !== undefined) {
+                    setUserData({
+                        firstName: response.firstName,
+                        lastName: response.lastName,
+                        userName: response.userName,
+                        email: response.email,
+                        password: '',
+                        dateOfBirth: response.dateOfBirth,
+                        country: response.country,
+                        phoneNumber: response.phoneNumber
+                    });
+                }
+            } catch (error) {
+                console.error('Došlo je do greške: ', error);
+            }
+        };
+        fetchData();
         fetchCountries();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Funkcija za podešavanje vrednosti polja za prikaz informacija o korisniku
+    useEffect(() => {
+        setFirstName(userData.firstName || '');
+        setLastName(userData.lastName || '');
+        setUserName(userData.userName || '');
+        setEmail(userData.email || '');
+        setOldPassword('');
+        setDateOfBirth(userData.dateOfBirth || '');
+        setCountry(userData.country || '');
+        setSelectedCountry(userData.country || '');
+        setPhoneNumber(userData.phoneNumber || '');
+    }, [userData]);
+
+    // Funkcija za prelaz na početnu stranicu
     const openHomePage = () => {
         redirection('/');
     };
 
+    // Funkcija za prelaz na stranicu za profil
     const openProfilePage = async () => {
         redirection('/profile');
     }
 
+    // Funkcija za prelaz na stranicu za prikaz korpe
     const openCartPage = () => {
-        alert("Korpa");
+        redirection('/cart');
     };
 
+    // Funkcija za prelaz na stranicu za prijavu
     const openLoginPage = async () => {
         redirection('/login');
     }
 
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
         redirection('/login');
     }
 
+    // Funkcija za validaciju polja i za slanje podataka na server o izmeni profila
     const editProfile = async () => {
         var yearHelp = new Date(dateOfBirth);
         var currentYear = new Date().getFullYear();
@@ -124,13 +166,25 @@ const EditProfile: React.FC = () => {
         }
         else {
             try {
-                console.log(editedUser);
+                const updatedUser: IUser = {
+                    firstName,
+                    lastName,
+                    userName,
+                    email,
+                    password: oldPassword,
+                    dateOfBirth,
+                    country,
+                    phoneNumber
+                };
+                const response = await ProfileService.editProfile(updatedUser, newPassword);
+                console.log(response);
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
         }
     }
 
+    // Funkcija za obradu promene kod odabira države
     const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(event.target.value);
         setCountry(event.target.value);
