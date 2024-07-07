@@ -1,34 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Profile.css';
 import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import NavBarProfile from '../../components/NavBar/NavBarProfile';
+import ProfileService from "../../services/Profile/ProfileService";
+import { IUser } from "../../interfaces/IUser";
 
 const Profile: React.FC = () => {
 
     const redirection = useNavigate();
+    const [userData, setUserData] = useState<IUser>();
 
+    useEffect(() => {
+        // Funkcija za dobavljanje podataka o korisniku sa servera
+        const fetchData = async () => {
+            try {
+                const response = await ProfileService.getProfileData();
+                if (response !== undefined) {
+                    setUserData({
+                        firstName: response.firstName,
+                        lastName: response.lastName,
+                        userName: response.userName,
+                        email: response.email,
+                        password: '******',
+                        dateOfBirth: response.dateOfBirth,
+                        country: response.country,
+                        phoneNumber: response.phoneNumber
+                    });
+                }
+                else {
+                    console.error('Došlo je do greške!');
+                }
+            } catch (error) {
+                console.error('Došlo je do greške: ', error);
+            }
+        };
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Funkcija za prelaz na početnu stranicu
     const openHomePage = () => {
         redirection('/');
     };
 
+    // Funkcija za prelaz na stranicu za profil
     const openProfilePage = async () => {
         redirection('/profile');
     }
 
+    // Funkcija za prelaz na stranicu za prikaz korpe
     const openCartPage = () => {
-        alert("Korpa");
+        redirection('/cart');
     };
 
     const openLoginPage = async () => {
         redirection('/login');
     }
 
+    // Funkcija za prelaz na stranicu za prijavu
     const logOut = async () => {
         redirection('/login');
     }
 
+    // Funkcija za obradu odjave sa sistema
     const openEditProfile = async () => {
         redirection('/edit-profile');
     }
@@ -53,31 +89,31 @@ const Profile: React.FC = () => {
                         <tbody>
                             <tr>
                                 <td className="user-detail-label">Ime i Prezime:</td>
-                                <td className="user-detail-data">Marko Petrović</td>
+                                <td className="user-detail-data">{userData?.firstName} {userData?.lastName} </td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Korisničko ime:</td>
-                                <td className="user-detail-data">marko123</td>
+                                <td className="user-detail-data">{userData?.userName}</td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Email:</td>
-                                <td className="user-detail-data">marko@example.com</td>
+                                <td className="user-detail-data">{userData?.email}</td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Lozinka:</td>
-                                <td className="user-detail-data">********</td>
+                                <td className="user-detail-data">{userData?.password}</td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Datum rođenja:</td>
-                                <td className="user-detail-data">01.01.1990</td>
+                                <td className="user-detail-data">{userData?.dateOfBirth}</td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Država:</td>
-                                <td className="user-detail-data">Srbija</td>
+                                <td className="user-detail-data">{userData?.country}</td>
                             </tr>
                             <tr>
                                 <td className="user-detail-label">Broj telefona:</td>
-                                <td className="user-detail-data">+381 64 123 4567</td>
+                                <td className="user-detail-data">{userData?.phoneNumber}</td>
                             </tr>
                         </tbody>
                     </table>
