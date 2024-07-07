@@ -121,5 +121,30 @@ namespace MyVideoGamesStoreAPI.Controllers
             }
             return BadRequest();
         }
+
+        /// <summary>
+        /// PUT method.
+        /// Updating user profile data.
+        /// Obrada zahteva za ažuriranje profila.
+        /// </summary>
+        /// <returns>An IActionResult containing a message indicating the successful modification of the profile data.</returns>
+        [HttpPut("editProfile")]
+        public IActionResult EditProfile([FromBody] ProfileRequest request)
+        {
+            string message = $"\nEdit profile details:\n" +
+                       $"\t\tFirstName: {request.FirstName}\n" +
+                       $"\t\tLastName: {request.LastName}\n" +
+                       $"\t\tUserName: {request.UserName}\n" +
+                       $"\t\tEmail: {request.Email}\n" +
+                       $"\t\tOld Password: {request.OldPassword}\n" +
+                       $"\t\tNew Password: {request.NewPassword}\n" +
+                       $"\t\tDateOfBirth: {request.DateOfBirth}\n" +
+                       $"\t\tCountry: {request.Country}\n" +
+                       $"\t\tPhoneNumber: {request.PhoneNumber}";
+
+            Debug.WriteLine(message);
+            _logger.LogInformation(message);
+            return Ok(new { message = "Podaci su uspešno ažurirani!" });
+        }
     }
 }
