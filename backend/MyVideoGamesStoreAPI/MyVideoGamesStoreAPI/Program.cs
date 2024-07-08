@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyVideoGamesStoreAPI.Database.Users;
+using MyVideoGamesStoreAPI.Encryption;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,16 +15,43 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactPolicy", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:3000")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
     });
+});
+
+// Add JwtConfiguration and configure it as a service
+builder.Services.AddSingleton<JwtConfiguration>();
+builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection("JwtSettings"));
+
+// Add JWT authentication
+var jwtKeyString = builder.Configuration.GetSection("JwtSettings:Key").Value;
+var jwtkey = Encoding.ASCII.GetBytes(jwtKeyString);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(jwtkey),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
 });
 
 // Database configuration
 builder.Services.AddDbContext<UsersDbContext>(options =>
 {
-    options.UseSqlServer("Server=KRISZTIAN\\SQLEXPRESS;Database=my-video-games-store;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=false;");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString"));
 });
 
 builder.Services.AddScoped<UsersRepository>();
