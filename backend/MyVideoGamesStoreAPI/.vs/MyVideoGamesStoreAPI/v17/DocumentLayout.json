@@ -1,12 +1,122 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\myvideogamesstoreapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\myvideogamesstoreapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\mappings\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\mappings\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|c:\\users\\krist\\onedrive\\dokumentumok\\github\\my-video-games-store\\backend\\myvideogamesstoreapi\\myvideogamesstoreapi\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9B03595-5682-4FE8-9D1A-70D8E7AFE6F9}|MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj|solutionrelative:myvideogamesstoreapi\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\Controllers\\UsersController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAPEAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:15:05.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Program.cs",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Program.cs",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAD8AAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:12:46.984Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Mappings\\UserProfile.cs",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\Mappings\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Mappings\\UserProfile.cs",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\Mappings\\UserProfile.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:10:57.951Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MyVideoGamesStoreAPI",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-07-08T17:10:30.576Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Models\\User.cs",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\Models\\User.cs",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\Models\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:09:58.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\DTOs\\UserDto.cs",
+              "RelativeDocumentMoniker": "MyVideoGamesStoreAPI\\DTOs\\UserDto.cs",
+              "ToolTip": "C:\\Users\\krist\\OneDrive\\Dokumentumok\\GitHub\\my-video-games-store\\backend\\MyVideoGamesStoreAPI\\MyVideoGamesStoreAPI\\DTOs\\UserDto.cs",
+              "RelativeToolTip": "MyVideoGamesStoreAPI\\DTOs\\UserDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-08T17:07:16.31Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
