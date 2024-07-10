@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css'
 import { ILoginModel } from '../../interfaces/ILoginModel';
@@ -6,9 +7,11 @@ import { GoogleLogin } from 'react-google-login';
 import { googleClientId } from '../../config'
 import LoginService from '../../services/Login/LoginService';
 import RegistrationService from '../../services/Registration/RegistrationService';
+import NavBarLogin from '../../components/NavBar/NavBarLogin';
 
 const Login = () => {
 
+    const redirection = useNavigate();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const loggedUser: ILoginModel = {
@@ -27,7 +30,18 @@ const Login = () => {
         else {
             try {
                 const response = await LoginService.loginUser(loggedUser);
-                alert(response.message);
+                if (response.responseCode === -2) {
+                    alert(response.message);
+                }
+                else if (response.responseCode === -1) {
+                    alert(response.message);
+                }
+                else {
+                    alert(response.message);
+                    const token = response.token;
+                    localStorage.setItem('token', token);
+                    redirection('/');
+                }
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -40,16 +54,10 @@ const Login = () => {
             const { name, email, familyName, givenName } = response.profileObj;
             try {
                 const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
-                if (response.message === '2') {
-                    alert('Uspešno ste se registrovali!');
-                }
-                else if (response.message === '1') {
-                    alert('Uspešno ste se prijavili!');
-                }
-                else {
-                    alert('Google !');
-                    //alert('Registracija je neuspešna. Došlo je do greške tokom obrade podataka!');
-                }
+                const token = response.token;
+                localStorage.setItem('token', token);
+                alert(response.message);
+                redirection('/');
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -66,6 +74,7 @@ const Login = () => {
 
     return (
         <div className='logPageStyle'>
+            <NavBarLogin />
             <div className='logContainerStyle'>
                 <div className='logFormStyle'>
                     <h1 className='logTitleStyle'>Prijava</h1>
