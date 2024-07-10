@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Registration.css';
 import { IUser } from "../../interfaces/IUser";
@@ -7,9 +8,11 @@ import { ICountry } from "../../interfaces/ICountry";
 import { GoogleLogin } from 'react-google-login';
 import { googleClientId } from '../../config'
 import RegistrationService from "../../services/Registration/RegistrationService";
+import NavBarRegistration from "../../components/NavBar/NavBarRegistration";
 
 const Registration: React.FC = () => {
 
+    const redirection = useNavigate();
     const [countries, setCountries] = useState<ICountry[]>([]);
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [firstName, setFirstName] = useState<string>("");
@@ -47,8 +50,8 @@ const Registration: React.FC = () => {
                 console.error('Error fetching countries:', error);
             }
         };
-
         fetchCountries();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Funkcija za validaciju polja i slanje podataka na server za registraciju
@@ -102,7 +105,16 @@ const Registration: React.FC = () => {
         else {
             try {
                 const response = await RegistrationService.registerUser(user);
-                alert(response.message)
+                if (response.responseCode === -2) {
+                    alert(response.message);
+                }
+                else if (response.responseCode === -1) {
+                    alert(response.message);
+                }
+                else {
+                    alert(response.message);
+                    redirection('/login');
+                }
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -115,16 +127,10 @@ const Registration: React.FC = () => {
             const { name, email, familyName, givenName } = response.profileObj;
             try {
                 const response = await RegistrationService.googleAccountLogin(name, email, familyName, givenName);
-                if (response.message === '2') {
-                    alert('Uspešno ste se registrovali!');
-                }
-                else if (response.message === '1') {
-                    alert('Uspešno ste se prijavili!');
-                }
-                else {
-                    alert('Google !');
-                    //alert('Registracija je neuspešna. Došlo je do greške tokom obrade podataka!');
-                }
+                const token = response.token;
+                localStorage.setItem('token', token);
+                alert(response.message);
+                redirection('/');
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -147,6 +153,7 @@ const Registration: React.FC = () => {
 
     return (
         <div className="regPageStyle">
+            <NavBarRegistration />
             <div className="regContainerStyle">
                 <div className="regFormStyle">
                     <h1 className="regTitleStyle">Registracija</h1>
