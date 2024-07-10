@@ -13,8 +13,14 @@ const Profile: React.FC = () => {
     const [userData, setUserData] = useState<IUser>();
 
     useEffect(() => {
+        // Zaštita stranice
+        const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }
+
         // Funkcija za dobavljanje podataka o korisniku sa servera
-        const fetchData = async () => {
+        const fetchUserData = async () => {
             try {
                 const response = await ProfileService.getProfileData();
                 if (response !== undefined) {
@@ -36,7 +42,7 @@ const Profile: React.FC = () => {
                 console.error('Došlo je do greške: ', error);
             }
         };
-        fetchData();
+        fetchUserData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -55,16 +61,22 @@ const Profile: React.FC = () => {
         redirection('/cart');
     };
 
+    // Funkcija za prelaz na stranicu za prijavu
     const openLoginPage = async () => {
         redirection('/login');
     }
 
-    // Funkcija za prelaz na stranicu za prijavu
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
-    // Funkcija za obradu odjave sa sistema
+    // Funkcija za prelaz na stranicu za ažuriranje profila
     const openEditProfile = async () => {
         redirection('/edit-profile');
     }
