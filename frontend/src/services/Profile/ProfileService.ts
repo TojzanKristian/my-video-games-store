@@ -5,7 +5,13 @@ import { SERVER_URL } from '../../config'
 class ProfileService {
     async getProfileData() {
         try {
-            const response = await axios.get(`${SERVER_URL}/api/users/profile`, {});
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${SERVER_URL}/api/users/profile`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             return response.data;
         } catch (error) {
             throw new Error('Došlo je do greške: ' + (error as AxiosError).message);
@@ -14,6 +20,7 @@ class ProfileService {
 
     async editProfile(profileData: any, newPassword: any) {
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.put(`${SERVER_URL}/api/users/editProfile`, {
                 firstName: profileData.firstName,
                 lastName: profileData.lastName,
@@ -24,6 +31,10 @@ class ProfileService {
                 dateOfBirth: profileData.dateOfBirth,
                 country: profileData.country,
                 phoneNumber: profileData.phoneNumber
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             return response.data;
         } catch (error) {
