@@ -40,7 +40,12 @@ const Login = () => {
                     alert(response.message);
                     const token = response.token;
                     localStorage.setItem('token', token);
-                    redirection('/');
+                    if (response.email === 'kristiantojzan@gmail.com') {
+                        redirection('/all-users');
+                    }
+                    else {
+                        redirection('/');
+                    }
                 }
             } catch (error) {
                 console.error("Došlo je do greške:", error);
