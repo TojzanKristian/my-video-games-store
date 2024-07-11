@@ -35,6 +35,12 @@ const EditProfile: React.FC = () => {
     });
 
     useEffect(() => {
+        // Zaštita stranice
+        const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }
+
         // Funkcija za dobavljanje svih postojećih država
         const fetchCountries = async () => {
             try {
@@ -51,7 +57,7 @@ const EditProfile: React.FC = () => {
         };
 
         // Funkcija za dobavljanje podataka o korisniku sa servera
-        const fetchData = async () => {
+        const fetchUserData = async () => {
             try {
                 const response = await ProfileService.getProfileData();
                 if (response !== undefined) {
@@ -70,7 +76,7 @@ const EditProfile: React.FC = () => {
                 console.error('Došlo je do greške: ', error);
             }
         };
-        fetchData();
+        fetchUserData();
         fetchCountries();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -81,7 +87,6 @@ const EditProfile: React.FC = () => {
         setLastName(userData.lastName || '');
         setUserName(userData.userName || '');
         setEmail(userData.email || '');
-        setOldPassword('');
         setDateOfBirth(userData.dateOfBirth || '');
         setCountry(userData.country || '');
         setSelectedCountry(userData.country || '');
@@ -110,7 +115,12 @@ const EditProfile: React.FC = () => {
 
     // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
     // Funkcija za validaciju polja i za slanje podataka na server o izmeni profila
@@ -131,26 +141,23 @@ const EditProfile: React.FC = () => {
         else if (!/^[a-zA-Z\u00C0-\u017F]*$/.test(lastName)) {
             alert("Za polje prezime se moraju uneti samo slova!");
         }
-        else if (userName.length === 0) {
-            alert("Polje za korisničko ime mora biti popunjeno!");
-        }
-        else if (!/[a-zA-Z0-9]/.test(userName)) {
-            alert("Korisničko ime sme sadržavati samo slova i brojeve!");
-        }
         else if (email.length === 0 || !/^[a-zA-Z0-9@.]*$/.test(email) || !email.includes('@') || !email.includes('.')) {
             alert("Email mora biti popunjen!");
         }
-        else if (oldPassword.length === 0 || oldPassword.length < 6) {
-            alert("Stara lozinka mora biti popunjena!");
+        else if (oldPassword !== '' && oldPassword.length < 6) {
+            alert("Polje za trenutnu lozinku mora imati bar 6 karaktera!");
         }
-        else if (newPassword.length === 0 || newPassword.length < 6) {
-            alert("Nova lozinka mora biti popunjena!");
+        else if (newPassword !== '' && newPassword.length < 6) {
+            alert("Polje za novu lozinku mora imati bar 6 karaktera!");
         }
-        else if (newPasswordCheck.length === 0 || newPasswordCheck.length < 6) {
-            alert("Polje za proveru nove lozinke mora biti popunjeno!");
+        else if (newPasswordCheck !== '' && newPasswordCheck.length < 6) {
+            alert("Polje za potvrdu nove lozinke mora imati bar 6 karaktera!");
         }
-        else if (newPassword !== newPasswordCheck) {
-            alert("Polje za novu lozinku i proveru lozinke se ne poklapaju!");
+        else if (newPassword !== '' && oldPassword === newPassword) {
+            alert("Trenutna i nova lozinka su iste!");
+        }
+        else if (newPasswordCheck !== newPassword) {
+            alert("Polje za lozinku i proveru lozinke se ne poklapaju!");
         }
         else if (dateOfBirth.length === 0) {
             alert("Polje za datum rođenja mora biti popunjen!");
@@ -177,7 +184,16 @@ const EditProfile: React.FC = () => {
                     phoneNumber
                 };
                 const response = await ProfileService.editProfile(updatedUser, newPassword);
-                console.log(response);
+                if (response.responseCode === -2) {
+                    alert(response.message);
+                }
+                else if (response.responseCode === -1) {
+                    alert(response.message);
+                }
+                else {
+                    alert(response.message);
+                    redirection('/profile');
+                }
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
@@ -222,7 +238,7 @@ const EditProfile: React.FC = () => {
                             <tr>
                                 <td className="user-detail-label">Korisničko ime:</td>
                                 <td>
-                                    <input className='inputStyle' type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                                    <input className='inputStyle' type="text" value={userName} readOnly />
                                 </td>
                             </tr>
                             <tr>
