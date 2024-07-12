@@ -60,6 +60,12 @@ table {
     border: 1px solid #fff;
 }
 
+.flagImage {
+    margin-left: 10px;
+    width: 40px;
+    height: auto;
+}
+
 .footer {
     margin-top: auto;
     text-align: center;

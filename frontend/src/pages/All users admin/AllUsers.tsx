@@ -1,16 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AllUsers.css';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import NavBarAllUsers from '../../components/NavBar/NavBarAllUsers';
+import axios from 'axios';
+import { ICountry } from "../../interfaces/ICountry";
+import { IUser } from "../../interfaces/IUser";
+import AdminService from "../../services/Admin/AdminService";
 
 const AllUsers: React.FC = () => {
 
     const redirection = useNavigate();
+    const [countries, setCountries] = useState<ICountry[]>([]);
+    const [allUsers, setAllUsers] = useState<IUser[]>([]);
 
+    useEffect(() => {
+        // Zaštita stranice
+        const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }
+
+        // Funkcija za dobavljanje svih postojećih država
+        const fetchCountries = async () => {
+            try {
+                const response = await axios.get('https://restcountries.com/v3.1/all');
+                const countriesData = response.data.map((country: any) => ({
+                    name: country.name.common,
+                    code: country.cca3,
+                    flag: country.flags.png
+                })).sort((a: any, b: any) => a.name.localeCompare(b.name));
+                setCountries(countriesData);
+            } catch (error) {
+                console.error('Error fetching countries:', error);
+            }
+        };
+
+        // Funkcija za dobavljanje podataka o svim korisnicima u sistemu sa servera
+        const fetchAllUsersData = async () => {
+            try {
+                const response = await AdminService.getAllUsers();
+                if (response !== undefined) {
+                    if (response.email === 'kristiantojzan@gmail.com') {
+                        setAllUsers(response.data);
+                    }
+                    else {
+                        redirection('/login');
+                    }
+                }
+            } catch (error) {
+                console.error('Došlo je do greške: ', error);
+            }
+        };
+        fetchAllUsersData();
+        fetchCountries();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
     return (
@@ -37,96 +92,20 @@ const AllUsers: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle">Marko</td>
-                            <td className="tdStyle">Markovic</td>
-                            <td className="tdStyle">marko23</td>
-                            <td className="tdStyle">marko@gmail.com</td>
-                            <td className="tdStyle">01.01.1990</td>
-                            <td className="tdStyle">Srbija</td>
-                            <td className="tdStyle">+381 64 123 4567</td>
-                        </tr>
+                        {allUsers.map((user, index) => (
+                            <tr key={index}>
+                                <td className="tdStyle">{user.firstName}</td>
+                                <td className="tdStyle">{user.lastName}</td>
+                                <td className="tdStyle">{user.userName}</td>
+                                <td className="tdStyle">{user.email}</td>
+                                <td className="tdStyle">{user.dateOfBirth}</td>
+                                <td className="tdStyle">
+                                    {user.country}
+                                    <img src={countries.find(country => country.name === user.country)?.flag} alt={user.country} className="flagImage" />
+                                </td>
+                                <td className="tdStyle">{user.phoneNumber}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </main>
