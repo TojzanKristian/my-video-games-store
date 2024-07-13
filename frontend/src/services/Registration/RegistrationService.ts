@@ -1,9 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios, { AxiosError } from 'axios';
-import { SERVER_URL } from '../../config'
+import { SERVER_URL } from '../../config';
+import { IUser } from '../../interfaces/IUser';
 
 class RegistrationService {
-    async registerUser(userData: any) {
+    async registerUser(userData: IUser) {
         try {
             const response = await axios.post(`${SERVER_URL}/api/users/registration`, {
                 firstName: userData.firstName,
@@ -21,7 +22,7 @@ class RegistrationService {
         }
     }
 
-    async googleAccountLogin(name: any, email: any, familyName: any, givenName: any) {
+    async googleAccountLogin(name: string, email: string, familyName: string, givenName: string) {
         try {
             const response = await axios.post(`${SERVER_URL}/api/users/googleAccountLogin`, {
                 userName: name,
