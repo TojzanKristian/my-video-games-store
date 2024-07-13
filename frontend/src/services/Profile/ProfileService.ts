@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios, { AxiosError } from 'axios';
-import { SERVER_URL } from '../../config'
+import { SERVER_URL } from '../../config';
+import { IUser } from '../../interfaces/IUser';
 
 class ProfileService {
     async getProfileData() {
@@ -18,7 +19,7 @@ class ProfileService {
         }
     }
 
-    async editProfile(profileData: any, newPassword: any) {
+    async editProfile(profileData: IUser, newPassword: string) {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(`${SERVER_URL}/api/users/editProfile`, {
