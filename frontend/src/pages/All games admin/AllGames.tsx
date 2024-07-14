@@ -1,16 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AllGames.css';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import NavBarAllGames from '../../components/NavBar/NavBarAllGames';
+import { IGame } from "../../interfaces/IGame";
+import AdminService from "../../services/Admin/AdminService";
 
 const AllGames: React.FC = () => {
 
     const redirection = useNavigate();
+    const [allGames, setAllGames] = useState<IGame[]>([]);
 
+    useEffect(() => {
+        // Zaštita stranice
+        const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }
+
+        // Funkcija za dobavljanje podataka o svim igricama u sistemu sa servera
+        const fetchAllGamesData = async () => {
+            try {
+                const response = await AdminService.getAllGames();
+                console.log(response.data)
+                if (response !== undefined) {
+                    if (response.email === 'kristiantojzan@gmail.com') {
+                        const gamesWithDefaults: IGame[] = response.data.map((game: any) => ({
+                            ...game,
+                            youtubeLink: '',
+                            image: null
+                        }));
+                        gamesWithDefaults.sort((a, b) => a.name.localeCompare(b.name));
+                        setAllGames(gamesWithDefaults);
+                    }
+                    else {
+                        redirection('/login');
+                    }
+                }
+            } catch (error) {
+                console.error('Došlo je do greške: ', error);
+            }
+        };
+        fetchAllGamesData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
     return (
@@ -31,17 +74,17 @@ const AllGames: React.FC = () => {
                             <th scope="col" className='thStyle'>Naziv igrice</th>
                             <th scope="col" className='thStyle'>Cena</th>
                             <th scope="col" className='thStyle'>Kategorija</th>
-                            <th scope="col" className='thStyle'>Ključ</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style " /></td>
-                            <td className="tdStyle">Counter Strike 2</td>
-                            <td className="tdStyle">50</td>
-                            <td className="tdStyle">FPS</td>
-                            <td className="tdStyle">ADA7ADAAHA6751AD</td>
-                        </tr>
+                        {allGames.map((game, index) => (
+                            <tr key={index}>
+                                <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style" /></td>
+                                <td className="tdStyle">{game.name}</td>
+                                <td className="tdStyle">{game.price}</td>
+                                <td className="tdStyle">{game.category}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </main>
