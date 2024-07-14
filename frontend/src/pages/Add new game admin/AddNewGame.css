@@ -90,6 +90,13 @@ table {
     text-align: center;
 }
 
+.profileImageContainer img {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 120px;
+    height: auto;
+}
+
 .footer {
     text-align: center;
     padding: 10px;

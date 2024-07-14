@@ -5,88 +5,98 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import NavBarAddNewGame from "../../components/NavBar/NavBarAddNewGame";
+import VideoGameService from "../../services/Video game/VideoGameService";
+import { IGame } from "../../interfaces/IGame";
 
 const AddNewGame: React.FC = () => {
 
     const redirection = useNavigate();
     const [currencies, setCurrencies] = useState<string[]>([]);
-    const [currency, setCurrency] = useState<string>('');
-    const [videoGamesName, setvideoGamesName] = useState<string>("");
+    const [currency, setCurrency] = useState<string>('USD');
+    const [videoGameName, setvideoGameName] = useState<string>("");
     const [price, setPrice] = useState<string>("");
     const [category, setCategory] = useState<string>("");
     const [ytLink, setYTLink] = useState<string>("");
+    const [image, setImage] = useState<File | null>(null);
+    const [imageInput, setImageInput] = useState<string>("");
 
     useEffect(() => {
+        // Zaštita stranice
+        /*const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }*/
+
         // Funkcija za dobavljanje svih postojećih valuta
         const supplyCurrencies = async () => {
             const response = await axios.get('https://open.er-api.com/v6/latest');
             const valuteAPI: string[] = Object.keys(response.data.rates);
             setCurrencies(valuteAPI);
         };
-
         supplyCurrencies();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
-    const editProfile = async () => {
-        /*var yearHelp = new Date(dateOfBirth);
-        var currentYear = new Date().getFullYear();
-        var year = yearHelp.getFullYear();
-
-        if (firstName.length === 0) {
-            alert("Polje za ime mora biti popunjeno!");
+    // Funkcija za validaciju polja i slanje zahetva za dodavanje nove igrice na server
+    const addNewVideoGame = async () => {
+        if (videoGameName.length === 0) {
+            alert("Polje za naziv igrice mora biti popunjeno!");
         }
-        else if (!/^[a-zA-Z\u00C0-\u017F]*$/.test(firstName)) {
-            alert("Za polje ime se moraju uneti samo slova!");
+        else if (category.length === 0) {
+            alert("Polje za kategoriju igrice mora biti popunjeno!");
         }
-        else if (lastName.length === 0) {
-            alert("Polje za prezime mora biti popunjeno!");
+        else if (price.length === 0) {
+            alert("Polje za cenu igrice mora biti popunjeno!");
         }
-        else if (!/^[a-zA-Z\u00C0-\u017F]*$/.test(lastName)) {
-            alert("Za polje prezime se moraju uneti samo slova!");
+        else if (ytLink.length === 0) {
+            alert("Polje za YouTube link mora biti popunjeno!");
         }
-        else if (userName.length === 0) {
-            alert("Polje za korisničko ime mora biti popunjeno!");
-        }
-        else if (!/[a-zA-Z0-9]/.test(userName)) {
-            alert("Korisničko ime sme sadržavati samo slova i brojeve!");
-        }
-        else if (email.length === 0 || !/^[a-zA-Z0-9@.]*$/.test(email) || !email.includes('@') || !email.includes('.')) {
-            alert("Email mora biti popunjen!");
-        }
-        else if (oldPassword.length === 0 || oldPassword.length < 6) {
-            alert("Stara lozinka mora biti popunjena!");
-        }
-        else if (newPassword.length === 0 || newPassword.length < 6) {
-            alert("Nova lozinka mora biti popunjena!");
-        }
-        else if (newPasswordCheck.length === 0 || newPasswordCheck.length < 6) {
-            alert("Polje za proveru nove lozinke mora biti popunjeno!");
-        }
-        else if (newPassword !== newPasswordCheck) {
-            alert("Polje za novu lozinku i proveru lozinke se ne poklapaju!");
-        }
-        else if (dateOfBirth.length === 0) {
-            alert("Polje za datum rođenja mora biti popunjen!");
-        }
-        else if (year >= currentYear) {
-            alert("Datum rođenja nije validan!");
-        }
-        else if (country.length === 0) {
-            alert("Morate odabrati državu!");
-        }
-        else if (phoneNumber.length === 0) {
-            alert("Polje za broj telefona mora biti popunjeno!");
+        else if (image === null) {
+            alert("Morate dodati sliku za igricu!");
         }
         else {
             try {
+                const newVideoGame: IGame = {
+                    name: videoGameName,
+                    category: category,
+                    price: price + ' ' + currency,
+                    youtubeLink: ytLink,
+                    image: image
+                };
+                const response = await VideoGameService.addNewGame(newVideoGame);
+                alert(response);
             } catch (error) {
                 console.error("Došlo je do greške:", error);
             }
-        }*/
+        }
+    }
+
+    // Funkcija za dinamički prikaz odabrane slike
+    function previewImageReg(input: any) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if (e.target) {
+                    const previewImg = document.getElementById('profileImage') as HTMLImageElement | null;
+                    if (previewImg) {
+                        previewImg.src = e.target.result as string;
+                        previewImg.style.width = '120px';
+                        previewImg.style.height = 'auto';
+                    }
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 
     return (
@@ -106,7 +116,7 @@ const AddNewGame: React.FC = () => {
                             <tr>
                                 <td className="user-detail-label">Naziv igrice:</td>
                                 <td>
-                                    <input className='inputStyle' type="text" value={videoGamesName} onChange={(e) => setvideoGamesName(e.target.value)} />
+                                    <input className='inputStyle' type="text" value={videoGameName} onChange={(e) => setvideoGameName(e.target.value)} />
                                 </td>
                             </tr>
                             <tr>
@@ -134,10 +144,24 @@ const AddNewGame: React.FC = () => {
                                     <input className='inputStyle' type="text" value={ytLink} onChange={(e) => setYTLink(e.target.value)} />
                                 </td>
                             </tr>
+                            <tr>
+                                <td className="user-detail-label">Slika:</td>
+                                <td><input type="file" onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                        setImage(e.target.files[0]);
+                                        setImageInput(e.target.value);
+                                        previewImageReg(e.target);
+                                    }
+                                }} /></td>
+                            </tr>
+                            <tr>
+                                <td colSpan={2} align="center" className="profileImageContainer">
+                                    <img id="profileImage" src={imageInput} alt="" />
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                    <br />
-                    <button className='btn btn-outline-dark' onClick={editProfile}>Dodaj igricu</button>
+                    <button className='btn btn-outline-dark' onClick={addNewVideoGame}>Dodaj igricu</button>
                 </div>
             </main>
             <footer className="footer">
