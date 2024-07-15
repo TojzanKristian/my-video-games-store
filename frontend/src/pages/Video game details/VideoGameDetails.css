@@ -1,0 +1,112 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
+
+.store-name {
+    font-size: 25px;
+}
+
+.icons {
+    display: flex;
+    gap: 30px;
+}
+
+.icon {
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.details-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.game-details {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.video-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.game-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+}
+
+.game-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 20px;
+    height: 100%;
+}
+
+.game-info h2 {
+    margin: 0;
+    align-self: flex-start;
+}
+
+.game-info .category {
+    align-self: flex-start;
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.category span {
+    font-weight: bold;
+}
+
+.game-info .price {
+    align-self: flex-start;
+    margin-top: 80px;
+    font-size: 20px;
+}
+
+.price span {
+    font-weight: bold;
+}
+
+.game-video iframe {
+    width: 800px;
+    height: 500px;
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    width: 100%;
+}
