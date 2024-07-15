@@ -1,0 +1,24 @@
+.video-game-card {
+    width: 16rem;
+}
+
+.video-game-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+.video-game-card .list-group-item {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.video-game-card .card-body {
+    text-align: center;
+    font-size: 20px;
+}
+
+.list-group-item.centered-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
