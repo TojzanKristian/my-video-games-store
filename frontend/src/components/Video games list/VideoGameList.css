@@ -1,0 +1,12 @@
+.category-container {
+    margin-bottom: 20px;
+}
+
+.card-container {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
