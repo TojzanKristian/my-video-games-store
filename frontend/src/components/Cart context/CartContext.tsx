@@ -5,6 +5,7 @@ interface CartContextProps {
   cart: IGame[];
   addToCart: (game: IGame) => void;
   removeFromCart: (name: string) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -39,8 +40,13 @@ export const CartProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
     alert('Izbacili ste igricu ' + name + ' iz korpe!');
   };
 
+  // Funkcija za pražnjenje korpe
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
