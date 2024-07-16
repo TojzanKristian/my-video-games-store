@@ -9,8 +9,9 @@ import { useCart } from "../../components/Cart context/CartContext";
 const Cart: React.FC = () => {
 
     const redirection = useNavigate();
-    const { cart, removeFromCart } = useCart();
-    const totalAmount = cart.reduce((total, game) => total + parseFloat(game.price.replace('$', '')), 0);
+    const { cart, removeFromCart, clearCart } = useCart();
+    const totalAmount = cart.reduce((total, game) => total + parseFloat(game.price.replace('USD', '')), 0);
+    const lotOfGameNames = cart.map(game => game.name).join(', ');
 
     useEffect(() => {
         // Zaštita stranice
@@ -45,7 +46,7 @@ const Cart: React.FC = () => {
     const logOut = async () => {
         try {
             localStorage.removeItem('token');
-            localStorage.removeItem('cart');
+            clearCart();
             redirection('/login');
         } catch (error) {
             console.error('Došlo je do greške:', error);
@@ -93,7 +94,7 @@ const Cart: React.FC = () => {
                     </div>
                     {totalAmount > 0 && (
                         <div className="payPalButton-div">
-                            <PayPalButton amount={totalAmount} onSuccess={(details) => console.log(details)} />
+                            <PayPalButton amount={totalAmount} lotOfGameNames={lotOfGameNames} onSuccess={(details) => console.log(details)} />
                         </div>
                     )}
                 </div>
