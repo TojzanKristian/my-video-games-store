@@ -1,14 +1,32 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { payPalId } from "../../config";
+import PurchaseService from "../../services/Purchase/PurchaseService";
+import { useCart } from "../Cart context/CartContext";
 
 interface PayPalButtonProps {
     amount: number;
+    lotOfGameNames: string;
     onSuccess: (details: any) => void;
 }
 
-const PayPalButton: React.FC<PayPalButtonProps> = ({ amount, onSuccess }) => {
+const PayPalButton: React.FC<PayPalButtonProps> = ({ amount, lotOfGameNames, onSuccess }) => {
+
+    const { clearCart } = useCart();
     const paypalOptions = {
         "client-id": payPalId
+    };
+
+    // Funkcija za slanje zahetva na server za uspešnu kupovinu i pražnjenje korpe
+    const handleSuccess = async (details: any) => {
+        try {
+            const totalAmount = amount + ' USD';
+            const response = await PurchaseService.processingPurchase(lotOfGameNames, totalAmount);
+            alert(response.message);
+            clearCart();
+        } catch (error) {
+            console.error('Error recording purchase on server:', error);
+        }
+        onSuccess(details);
     };
 
     return (
@@ -29,7 +47,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ amount, onSuccess }) => {
                 onApprove={(data, actions) => {
                     if (actions && actions.order) {
                         return actions.order.capture().then(function (details) {
-                            onSuccess(details);
+                            handleSuccess(details);
                         });
                     }
                     console.error('Greška kod action.order funkcije!');
