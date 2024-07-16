@@ -1,32 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyGames.css';
 import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import NavBarMyGames from '../../components/NavBar/NavBarMyGames';
+import { useCart } from "../../components/Cart context/CartContext";
+import { IGame } from "../../interfaces/IGame";
+import PurchaseService from "../../services/Purchase/PurchaseService";
 
 const MyGames: React.FC = () => {
 
     const redirection = useNavigate();
+    const { clearCart } = useCart();
+    const [myGames, setMyGames] = useState<IGame[]>([]);
 
+    useEffect(() => {
+        // Zaštita stranice
+        const token = localStorage.getItem('token');
+        if (!token) {
+            redirection('/login');
+        }
+
+        // Funkcija za dobavljanje podataka o svim kupljenim igricama za korisnika sa servera
+        const fetchMyGamesData = async () => {
+            try {
+                const response = await PurchaseService.getMyGames();
+                console.log(response)
+                setMyGames(response.data);
+            } catch (error) {
+                console.error('Došlo je do greške: ', error);
+            }
+        };
+        fetchMyGamesData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Funkcija za prelaz na početnu stranicu
     const openHomePage = () => {
         redirection('/');
     };
 
+    // Funkcija za prelaz na stranicu za profil
     const openProfilePage = async () => {
         redirection('/profile');
     }
 
+    // Funkcija za prelaz na stranicu za prikaz korpe
     const openCartPage = () => {
-        alert("Korpa");
+        redirection('/cart');
     };
 
+    // Funkcija za prelaz na stranicu za prijavu
     const openLoginPage = async () => {
         redirection('/login');
     }
 
+    // Funkcija za obradu odjave sa sistema
     const logOut = async () => {
-        redirection('/login');
+        try {
+            localStorage.removeItem('token');
+            clearCart();
+            redirection('/login');
+        } catch (error) {
+            console.error('Došlo je do greške:', error);
+        }
     }
 
     return (
@@ -50,28 +87,18 @@ const MyGames: React.FC = () => {
                             <th scope="col" className='thStyle'>Slika</th>
                             <th scope="col" className='thStyle'>Naziv igrice</th>
                             <th scope="col" className='thStyle'>Cena</th>
-                            <th scope="col" className='thStyle'>Ključ</th>
+                            <th scope="col" className='thStyle'>Kategorija</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style " /></td>
-                            <td className="tdStyle">Counter Strike 2</td>
-                            <td className="tdStyle">FTP</td>
-                            <td className="tdStyle">ASAF4543ADASFA</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style " /></td>
-                            <td className="tdStyle">Counter Strike 2</td>
-                            <td className="tdStyle">FTP</td>
-                            <td className="tdStyle">ASAF4543ADASFA</td>
-                        </tr>
-                        <tr>
-                            <td className="tdStyle"><img src="" alt="image" className="image-style " /></td>
-                            <td className="tdStyle">Counter Strike 2</td>
-                            <td className="tdStyle">FTP</td>
-                            <td className="tdStyle">ASAF4543ADASFA</td>
-                        </tr>
+                        {myGames.map((game, index) => (
+                            <tr key={index}>
+                                <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style" /></td>
+                                <td className="tdStyle">{game.name}</td>
+                                <td className="tdStyle">{game.price}</td>
+                                <td className="tdStyle">{game.category}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </main>
