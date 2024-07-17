@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MyVideoGamesStoreAPI.Database.Games;
+using MyVideoGamesStoreAPI.Database.Purchases;
 using MyVideoGamesStoreAPI.Database.Users;
 using MyVideoGamesStoreAPI.Encryption;
 using System.Text;
@@ -60,8 +61,14 @@ builder.Services.AddDbContext<GamesDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString"));
 });
 
+builder.Services.AddDbContext<PurchasesDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString"));
+});
+
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<GamesRepository>();
+builder.Services.AddScoped<PurchasesRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
