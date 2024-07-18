@@ -39,7 +39,7 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <param name="requestModel">The registration request model containing user details.</param>
         /// <returns>An IActionResult indicating the result of the registration.</returns>
         [HttpPost("registration")]
-        public IActionResult Registration([FromBody] RegistrationRequest requestModel)
+        public async Task<IActionResult> Registration([FromBody] RegistrationRequest requestModel)
         {
             string encryptedPassword = _sHA256Encryption.GetSHA256Hash(requestModel.Password);
             string message = $"\nRegistration details:\n" +
@@ -59,7 +59,7 @@ namespace MyVideoGamesStoreAPI.Controllers
             try
             {
                 User newUser = new(requestModel.FirstName, requestModel.LastName, requestModel.UserName, requestModel.Email, encryptedPassword, requestModel.DateOfBirth, requestModel.Country, requestModel.PhoneNumber);
-                var retTuple = _usersRepository.AddUser(newUser);
+                var retTuple = await _usersRepository.AddUser(newUser);
                 returnCode = retTuple.Item1;
                 successMessage = retTuple.Item2;
                 Debug.WriteLine(successMessage + "\n");
@@ -95,7 +95,7 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <param name="request">The request model containing user details.</param>
         /// <returns>An IActionResult indicating the result of the registration/login via Google account..</returns>
         [HttpPost("googleAccountLogin")]
-        public IActionResult GoogleAccountLogin([FromBody] GoogleAccModelRequest request)
+        public async Task<IActionResult> GoogleAccountLogin([FromBody] GoogleAccModelRequest request)
         {
             string message = $"\nGoogle login details:\n" +
                       $"\t\tUserName: {request.UserName}\n" +
@@ -110,7 +110,7 @@ namespace MyVideoGamesStoreAPI.Controllers
             try
             {
                 User newUser = new(request.FirstName, request.LastName, request.UserName, request.Email, "", "", "", "");
-                var retTuple = _usersRepository.GoogleAccountLogin(newUser);
+                var retTuple = await _usersRepository.GoogleAccountLogin(newUser);
                 returnCode = retTuple.Item1;
                 successMessage = retTuple.Item2;
                 Debug.WriteLine(successMessage + "\n");
@@ -124,7 +124,7 @@ namespace MyVideoGamesStoreAPI.Controllers
                 return StatusCode(500, "Serverska greška tokom prijave sa Google nalogom!");
             }
 
-            var loggedInUser = _usersRepository.GetUserByEmail(request.Email);
+            var loggedInUser = await _usersRepository.GetUserByEmail(request.Email);
             var tokenString = _jwtConfiguration.GenerateToken(loggedInUser);
             return Ok(new { responseCode = returnCode, message = successMessage, token = tokenString });
         }
@@ -137,7 +137,7 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <param name="model">The request model containing login details.</param>
         /// <returns>An IActionResult indicating the result of the login.</returns>
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
             string encryptedPassword = _sHA256Encryption.GetSHA256Hash(model.Password);
             string message = $"\nLogin details:\n" +
@@ -150,7 +150,7 @@ namespace MyVideoGamesStoreAPI.Controllers
             string successMessage;
             try
             {
-                var retTuple = _usersRepository.AuthenticateUser(model.Email, encryptedPassword);
+                var retTuple = await _usersRepository.AuthenticateUser(model.Email, encryptedPassword);
                 returnCode = retTuple.Item1;
                 successMessage = retTuple.Item2;
                 Debug.WriteLine(successMessage + "\n");
@@ -177,7 +177,7 @@ namespace MyVideoGamesStoreAPI.Controllers
 
             if (returnCode == 0)
             {
-                var loggedInUser = _usersRepository.GetUserByEmail(model.Email);
+                var loggedInUser = await _usersRepository.GetUserByEmail(model.Email);
                 var tokenString = _jwtConfiguration.GenerateToken(loggedInUser);
                 return Ok(new { responseCode = returnCode, message = successMessage, token = tokenString, email = model.Email });
             }
@@ -193,14 +193,14 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <returns>An IActionResult containing the user profile data if successful, or a BadRequest if not.</returns>
         [Authorize]
         [HttpGet("profile")]
-        public IActionResult GetProfileData()
+        public async Task<IActionResult> GetProfileData()
         {
             var userNameClaim = User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Name))?.Value;
             if (!string.IsNullOrEmpty(userNameClaim))
             {
                 try
                 {
-                    var user = _usersRepository.GetUserByUserName(userNameClaim);
+                    var user = await _usersRepository.GetUserByUserName(userNameClaim);
                     if (user != null)
                     {
                         UserDto userDTO = _mapper.Map<UserDto>(user);
@@ -238,14 +238,14 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <returns>An IActionResult containing a message indicating the successful modification of the profile data.</returns>
         [Authorize]
         [HttpPut("editProfile")]
-        public IActionResult EditProfile([FromBody] ProfileRequest request)
+        public async Task<IActionResult> EditProfile([FromBody] ProfileRequest request)
         {
             var userNameClaim = User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Name))?.Value;
             if (!string.IsNullOrEmpty(userNameClaim))
             {
                 try
                 {
-                    var user = _usersRepository.GetUserByUserName(userNameClaim);
+                    var user = await _usersRepository.GetUserByUserName(userNameClaim);
                     if (user != null)
                     {
                         string encryptedOldPassword = string.Empty;
@@ -276,7 +276,7 @@ namespace MyVideoGamesStoreAPI.Controllers
                         User modifiedUserData = new(request.FirstName, request.LastName, request.UserName, request.Email, encryptedNewPassword, request.DateOfBirth, request.Country, request.PhoneNumber);
                         try
                         {
-                            var retTuple = _usersRepository.UpdateUser(user, encryptedOldPassword, modifiedUserData);
+                            var retTuple = await _usersRepository.UpdateUser(user, encryptedOldPassword, modifiedUserData);
                             returnCode = retTuple.Item1;
                             successMessage = retTuple.Item2;
                             Debug.WriteLine(successMessage + "\n");
@@ -320,19 +320,19 @@ namespace MyVideoGamesStoreAPI.Controllers
         /// <returns>An IActionResult indicating the result of the operation.</returns>
         [Authorize]
         [HttpGet("getAllUsers")]
-        public IActionResult GetAllUsersForAdmin()
+        public async Task<IActionResult> GetAllUsersForAdmin()
         {
             var userNameClaim = User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Name))?.Value;
             if (!string.IsNullOrEmpty(userNameClaim))
             {
                 try
                 {
-                    var loggedInUser = _usersRepository.GetUserByUserName(userNameClaim);
+                    var loggedInUser = await _usersRepository.GetUserByUserName(userNameClaim);
                     if (loggedInUser != null)
                     {
                         try
                         {
-                            List<User> allUsersFromDB = _usersRepository.GetUsers().ToList();
+                            List<User> allUsersFromDB = await _usersRepository.GetUsers();
                             List<UserDto> allUsers = _mapper.Map<List<UserDto>>(allUsersFromDB);
                             string message = "\nList of all users for Admin:\n";
                             foreach (var user in allUsers)
