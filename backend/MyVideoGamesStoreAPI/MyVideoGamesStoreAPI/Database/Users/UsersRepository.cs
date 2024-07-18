@@ -1,4 +1,5 @@
-﻿using MyVideoGamesStoreAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyVideoGamesStoreAPI.Models;
 using MyVideoGamesStoreAPI.Responses;
 
 namespace MyVideoGamesStoreAPI.Database.Users
@@ -24,20 +25,20 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// <returns>A tuple indicating the result of the registration:
         /// - Item1: Status code (-2 for username already exists, -1 for email already exists, 0 for success).
         /// - Item2: Status message corresponding to the registration result.</returns>
-        public Tuple<int, string> AddUser(User user)
+        public Task<Tuple<int, string>> AddUser(User user)
         {
             if (_dbContext.Users.Any(u => u.UserName == user.UserName))
             {
-                return _registrationResponse.AlreadyExistsWithThisUsername;
+                return Task.FromResult(_registrationResponse.AlreadyExistsWithThisUsername);
             }
             if (_dbContext.Users.Any(u => u.Email == user.Email))
             {
-                return _registrationResponse.AlreadyExistsWithThisEmail;
+                return Task.FromResult(_registrationResponse.AlreadyExistsWithThisEmail);
             }
 
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
-            return _registrationResponse.Success;
+            return Task.FromResult(_registrationResponse.Success);
         }
 
         /// <summary>
@@ -46,9 +47,9 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// </summary>
         /// <param name="email">The email of the user to retrieve.</param>
         /// <returns>The user model if found; otherwise, null.</returns>
-        public User GetUserByEmail(string email)
+        public Task<User> GetUserByEmail(string email)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.Email.Equals(email));
+            return _dbContext.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
         }
 
         /// <summary>
@@ -57,9 +58,9 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// </summary>
         /// <param name="userName">The username of the user to retrieve.</param>
         /// <returns>The user model if found; otherwise, null.</returns>
-        public User GetUserByUserName(string userName)
+        public Task<User> GetUserByUserName(string userName)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.UserName.Equals(userName));
+            return _dbContext.Users.FirstOrDefaultAsync(u => u.UserName.Equals(userName));
         }
 
         /// <summary>
@@ -71,9 +72,9 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// <returns>A tuple containing an authentication status code and message:
         /// - Item1: Status code (-2 for not found, -1 for incorrect password, 0 for authenticated).
         /// - Item2: Status message corresponding to the authentication status.</returns>
-        public Tuple<int, string> AuthenticateUser(string email, string password)
+        public async Task<Tuple<int, string>> AuthenticateUser(string email, string password)
         {
-            var user = GetUserByEmail(email);
+            var user = await GetUserByEmail(email);
             if (user == null)
             {
                 return _authenticationResponse.NotFound;
@@ -91,9 +92,9 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// Preuzimanje svih korisnika iz baze podataka.
         /// </summary>
         /// <returns>An enumerable collection of User objects representing all users in the database.</returns>
-        public IEnumerable<User> GetUsers()
+        public Task<List<User>> GetUsers()
         {
-            return [.. _dbContext.Users];
+            return _dbContext.Users.ToListAsync();
         }
 
         /// <summary>
@@ -104,9 +105,9 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// <returns>A tuple indicating the result of the login operation:
         /// - Item1: Status code (0 for new user added, 1 for user already existed with the same email).
         /// - Item2: Status message corresponding to the login result.</returns>
-        public Tuple<int, string> GoogleAccountLogin(User newUser)
+        public async Task<Tuple<int, string>> GoogleAccountLogin(User newUser)
         {
-            var allUsers = GetUsers().ToList();
+            var allUsers = await GetUsers();
             if (allUsers.Count == 0)
             {
                 _dbContext.Users.Add(newUser);
@@ -136,7 +137,7 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// <param name="user">The user object containing the stored password.</param>
         /// <param name="password">The password to check against the user's stored password.</param>
         /// <returns>True if the provided password matches the user's stored password, otherwise false.</returns>
-        public bool CheckPassword(User user, string password)
+        private static bool CheckPassword(User user, string password)
         {
             if (user != null && user.Password.Equals(password))
             {
@@ -156,20 +157,20 @@ namespace MyVideoGamesStoreAPI.Database.Users
         /// <returns>A tuple containing an integer status code and a string message representing the result of the edit profile operation.
         /// - Item1: Status code (-3 for incorrect password, -2 for username already exists, -1 for email already exists, 0 for successful data modification).
         /// - Item2: Status message corresponding to the edit profile result.</returns>
-        public Tuple<int, string> UpdateUser(User user, string oldPassword, User modifiedUserData)
+        public Task<Tuple<int, string>> UpdateUser(User user, string oldPassword, User modifiedUserData)
         {
             if (!oldPassword.Equals(string.Empty))
             {
                 if (!CheckPassword(user, oldPassword))
                 {
-                    return _editProfileResponse.IncorrectPassword;
+                    return Task.FromResult(_editProfileResponse.IncorrectPassword);
                 }
             }
             if (!user.Email.Equals(modifiedUserData.Email))
             {
                 if (_dbContext.Users.Any(u => u.Email == modifiedUserData.Email))
                 {
-                    return _editProfileResponse.AlreadyExistsWithThisEmail;
+                    return Task.FromResult(_editProfileResponse.AlreadyExistsWithThisEmail);
                 }
             }
 
@@ -188,7 +189,7 @@ namespace MyVideoGamesStoreAPI.Database.Users
             user.PhoneNumber = modifiedUserData.PhoneNumber;
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
-            return _editProfileResponse.SuccessfullyModifiedData;
+            return Task.FromResult(_editProfileResponse.SuccessfullyModifiedData);
         }
     }
 }
