@@ -3,21 +3,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './VideoGameDetails.css';
 import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt } from 'react-icons/fa';
 import { useNavigate, useParams } from "react-router-dom";
-import { IGame } from "../../interfaces/IGame";
+import { IGameDetails } from "../../interfaces/IGameDetails";
 import VideoGameService from "../../services/Video game/VideoGameService";
+import { useCart } from "../../components/Cart context/CartContext";
 
 const VideoGameDetails: React.FC = () => {
 
     const redirection = useNavigate();
-    const [game, setGame] = useState<IGame>();
+    const [game, setGame] = useState<IGameDetails>();
     const { name } = useParams<{ name: string }>();
+    const { clearCart } = useCart();
 
     useEffect(() => {
         // Funkcija za dobavljanje podataka o igrici sa servera
         const fetchGameDetails = async () => {
             try {
                 const response = await VideoGameService.getGameByName(name);
-                setGame(response.data);
+                const gameData: IGameDetails = {
+                    name: response.data.name,
+                    category: response.data.category,
+                    price: response.data.price,
+                    youtubeLink: response.data.youtubeLink,
+                    image: response.data.imageUrl,
+                };
+                setGame(gameData);
             } catch (error) {
                 console.error("Error fetching game details:", error);
             }
@@ -50,7 +59,7 @@ const VideoGameDetails: React.FC = () => {
     const logOut = async () => {
         try {
             localStorage.removeItem('token');
-            localStorage.removeItem('cart');
+            clearCart();
             redirection('/login');
         } catch (error) {
             console.error('Error logging out:', error);
@@ -73,7 +82,7 @@ const VideoGameDetails: React.FC = () => {
                 <div className="details-container">
                     <div className="game-details">
                         <div className="game-image">
-                            <img src='/cs2.jpg' alt={game.name} />
+                            <img src={game.image} alt={game.name} />
                         </div>
                         <div className="game-info">
                             <h2>{game.name}</h2>
