@@ -4,13 +4,13 @@ import './AllGames.css';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import NavBarAllGames from '../../components/NavBar/NavBarAllGames';
-import { IGame } from "../../interfaces/IGame";
+import { IGameDetails } from "../../interfaces/IGameDetails";
 import AdminService from "../../services/Admin/AdminService";
 
 const AllGames: React.FC = () => {
 
     const redirection = useNavigate();
-    const [allGames, setAllGames] = useState<IGame[]>([]);
+    const [allGames, setAllGames] = useState<IGameDetails[]>([]);
 
     useEffect(() => {
         // Zaštita stranice
@@ -23,13 +23,12 @@ const AllGames: React.FC = () => {
         const fetchAllGamesData = async () => {
             try {
                 const response = await AdminService.getAllGames();
-                console.log(response.data)
                 if (response !== undefined) {
                     if (response.email === 'kristiantojzan@gmail.com') {
-                        const gamesWithDefaults: IGame[] = response.data.map((game: any) => ({
+                        const gamesWithDefaults: IGameDetails[] = response.data.map((game: any) => ({
                             ...game,
                             youtubeLink: '',
-                            image: null
+                            image: game.imageUrl
                         }));
                         gamesWithDefaults.sort((a, b) => a.name.localeCompare(b.name));
                         setAllGames(gamesWithDefaults);
@@ -79,7 +78,7 @@ const AllGames: React.FC = () => {
                     <tbody>
                         {allGames.map((game, index) => (
                             <tr key={index}>
-                                <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style" /></td>
+                                <td className="tdStyle"><img src={game.image} alt={game.name} className="image-style" /></td>
                                 <td className="tdStyle">{game.name}</td>
                                 <td className="tdStyle">{game.price}</td>
                                 <td className="tdStyle">{game.category}</td>
