@@ -5,14 +5,14 @@ import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt } from 'react
 import { useNavigate } from "react-router-dom";
 import NavBarMyGames from '../../components/NavBar/NavBarMyGames';
 import { useCart } from "../../components/Cart context/CartContext";
-import { IGame } from "../../interfaces/IGame";
+import { IGameDetails } from "../../interfaces/IGameDetails";
 import PurchaseService from "../../services/Purchase/PurchaseService";
 
 const MyGames: React.FC = () => {
 
     const redirection = useNavigate();
     const { clearCart } = useCart();
-    const [myGames, setMyGames] = useState<IGame[]>([]);
+    const [myGames, setMyGames] = useState<IGameDetails[]>([]);
 
     useEffect(() => {
         // Zaštita stranice
@@ -25,8 +25,14 @@ const MyGames: React.FC = () => {
         const fetchMyGamesData = async () => {
             try {
                 const response = await PurchaseService.getMyGames();
-                console.log(response)
-                setMyGames(response.data);
+                const games: IGameDetails[] = response.data.map((game: any) => ({
+                    name: game.name,
+                    category: game.category,
+                    price: game.price,
+                    youtubeLink: game.youtubeLink,
+                    image: game.imageUrl
+                }));
+                setMyGames(games);
             } catch (error) {
                 console.error('Došlo je do greške: ', error);
             }
@@ -93,7 +99,7 @@ const MyGames: React.FC = () => {
                     <tbody>
                         {myGames.map((game, index) => (
                             <tr key={index}>
-                                <td className="tdStyle"><img src="/cs2.jpg" alt="image" className="image-style" /></td>
+                                <td className="tdStyle"><img src={game.image} alt={game.name} className="image-style" /></td>
                                 <td className="tdStyle">{game.name}</td>
                                 <td className="tdStyle">{game.price}</td>
                                 <td className="tdStyle">{game.category}</td>
