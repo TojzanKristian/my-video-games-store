@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { IGame } from '../../interfaces/IGame';
+import { IGameDetails } from '../../interfaces/IGameDetails';
 
 interface CartContextProps {
-  cart: IGame[];
-  addToCart: (game: IGame) => void;
+  cart: IGameDetails[];
+  addToCart: (game: IGameDetails) => void;
   removeFromCart: (name: string) => void;
   clearCart: () => void;
 }
@@ -13,7 +13,7 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 export const CartProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
 
   // Inicijalizacija stanja korpe
-  const [cart, setCart] = useState<IGame[]>(() => {
+  const [cart, setCart] = useState<IGameDetails[]>(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
@@ -24,7 +24,7 @@ export const CartProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   }, [cart]);
 
   // Funkcija za dodavanje igrice u korpu
-  const addToCart = (game: IGame) => {
+  const addToCart = (game: IGameDetails) => {
     const isGameInCart = cart.some((cartItem) => cartItem.name === game.name);
     if (isGameInCart) {
       alert(`Igrica ${game.name} je već dodata u korpu!`);
