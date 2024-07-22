@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import NavBarProfile from '../../components/NavBar/NavBarProfile';
 import ProfileService from "../../services/Profile/ProfileService";
 import { IUser } from "../../interfaces/IUser";
+import { useCart } from "../../components/Cart context/CartContext";
 
 const Profile: React.FC = () => {
 
     const redirection = useNavigate();
     const [userData, setUserData] = useState<IUser>();
+    const { clearCart } = useCart();
 
     useEffect(() => {
         // Zaštita stranice
@@ -70,6 +72,7 @@ const Profile: React.FC = () => {
     const logOut = async () => {
         try {
             localStorage.removeItem('token');
+            clearCart();
             redirection('/login');
         } catch (error) {
             console.error('Došlo je do greške:', error);
