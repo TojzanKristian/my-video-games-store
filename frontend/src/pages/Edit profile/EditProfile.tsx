@@ -7,10 +7,12 @@ import axios from 'axios';
 import { ICountry } from "../../interfaces/ICountry";
 import { IUser } from "../../interfaces/IUser";
 import ProfileService from "../../services/Profile/ProfileService";
+import { useCart } from "../../components/Cart context/CartContext";
 
 const EditProfile: React.FC = () => {
 
     const redirection = useNavigate();
+    const { clearCart } = useCart();
     const [countries, setCountries] = useState<ICountry[]>([]);
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [firstName, setFirstName] = useState<string>("");
@@ -117,6 +119,7 @@ const EditProfile: React.FC = () => {
     const logOut = async () => {
         try {
             localStorage.removeItem('token');
+            clearCart();
             redirection('/login');
         } catch (error) {
             console.error('Došlo je do greške:', error);
