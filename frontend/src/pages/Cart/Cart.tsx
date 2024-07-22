@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Cart.css';
 import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt, FaTrash } from 'react-icons/fa';
@@ -15,10 +15,10 @@ const Cart: React.FC = () => {
 
     useEffect(() => {
         // Zaštita stranice
-        /*const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
         if (!token) {
             redirection('/login');
-        }*/
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -75,7 +75,7 @@ const Cart: React.FC = () => {
                                     <FaTrash className="trash-icon" onClick={() => removeFromCart(game.name)} />
                                 </div>
                                 <div className="card-image">
-                                    <img src="/cs2.jpg" alt={game.name} />
+                                    <img src={game.image} alt={game.name} />
                                 </div>
                                 <div className="card-content">
                                     <p className="card-title">{game.name}</p>
