@@ -1,6 +1,8 @@
+using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MyVideoGamesStoreAPI.Controllers;
 using MyVideoGamesStoreAPI.Database.Games;
 using MyVideoGamesStoreAPI.Database.Purchases;
 using MyVideoGamesStoreAPI.Database.Users;
@@ -50,7 +52,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Database configuration
+// Database configurations
 builder.Services.AddDbContext<UsersDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString"));
@@ -74,6 +76,17 @@ builder.Services.AddScoped<PurchasesRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Load AWS options from configuration
+var awsOptions = builder.Configuration.GetAWSOptions();
+
+// Specify the AWS profile in AWS options
+awsOptions.Credentials = new Amazon.Runtime.StoredProfileAWSCredentials("TK");
+
+// Register AWS services with the specified profile
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddScoped<FilesController>();
+
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -84,7 +97,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
     app.UseCors("ReactPolicy");
 }
 
