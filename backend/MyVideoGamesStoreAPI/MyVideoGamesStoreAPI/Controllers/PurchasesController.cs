@@ -27,14 +27,17 @@ namespace MyVideoGamesStoreAPI.Controllers
         private readonly IMapper _mapper;
         private readonly EmailSender _emailSender = new();
         private readonly KeyGenerator _keyGenerator = new();
+        private readonly FilesController _filesController;
+        private readonly string _bucketName = "my-video-games-store-images";
 
-        public PurchasesController(ILogger<PurchasesController> logger, UsersRepository usersRepository, PurchasesRepository purchasesRepository, GamesRepository gamesRepository, IMapper mapper)
+        public PurchasesController(ILogger<PurchasesController> logger, UsersRepository usersRepository, PurchasesRepository purchasesRepository, GamesRepository gamesRepository, IMapper mapper, FilesController filesController)
         {
             _logger = logger;
             _usersRepository = usersRepository ?? throw new ArgumentNullException(nameof(usersRepository));
             _purchasesRepository = purchasesRepository ?? throw new ArgumentNullException(nameof(purchasesRepository));
             _gamesRepository = gamesRepository ?? throw new ArgumentNullException(nameof(gamesRepository));
             _mapper = mapper;
+            _filesController = filesController;
         }
 
         /// <summary>
@@ -201,9 +204,28 @@ namespace MyVideoGamesStoreAPI.Controllers
                                 }
                             }
 
-                            List<HomePageVideoGameDto> myGamesDto = _mapper.Map<List<HomePageVideoGameDto>>(myVideoGames);
+                            List<VideoGameDetails> myGames = [];
+                            var result = await _filesController.GetAllFilesAsync(_bucketName, null);
+                            if (result is OkObjectResult okResult && okResult.Value is IEnumerable<MyS3Object> s3Objects)
+                            {
+                                var imageUrlDictionary = s3Objects.ToDictionary(
+                                    s3Object => _filesController.NormalizeString(s3Object.Name),
+                                    s3Object => s3Object.PresignedUrl
+                                );
+
+                                foreach (var game in myVideoGames)
+                                {
+                                    string normalizedGameName = _filesController.NormalizeString(game.Name);
+                                    if (imageUrlDictionary.TryGetValue(normalizedGameName, out var imageUrl))
+                                    {
+                                        var videoGameDetails = new VideoGameDetails(game.Name, game.Category, game.Price, game.YoutubeLink, imageUrl);
+                                        myGames.Add(videoGameDetails);
+                                    }
+                                }
+                            }
+
                             string message = $"\nVideo games for user {loggedInUser.UserName}:\n";
-                            foreach (var game in myGamesDto)
+                            foreach (var game in myGames)
                             {
                                 message += $"\t\tName: {game.Name}\n" +
                                    $"\t\tCategory: {game.Category}\n" +
@@ -212,7 +234,7 @@ namespace MyVideoGamesStoreAPI.Controllers
 
                             Debug.WriteLine(message);
                             _logger.LogInformation(message);
-                            return Ok(new { data = myGamesDto });
+                            return Ok(new { data = myGames });
                         }
                         catch (Exception ex)
                         {
