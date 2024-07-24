@@ -4,24 +4,26 @@ import './Home.css';
 import { FaUser, FaShoppingCart, FaSignOutAlt, FaHome, FaSignInAlt } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import VideoGameList from "../../components/Video games list/VideoGameList";
-import { IGame } from "../../interfaces/IGame";
+import { IGameDetails } from "../../interfaces/IGameDetails";
 import VideoGameService from "../../services/Video game/VideoGameService";
 import { categories } from "../../components/Video game categories/GameCategories";
+import { useCart } from "../../components/Cart context/CartContext";
 
 const Home: React.FC = () => {
 
     const redirection = useNavigate();
-    const [allGames, setAllGames] = useState<IGame[]>([]);
+    const [allGames, setAllGames] = useState<IGameDetails[]>([]);
+    const { clearCart } = useCart();
 
     useEffect(() => {
         // Funkcija za dobavljanje svih video igrica sa servera
         const fetchAllGamesData = async () => {
             try {
                 const response = await VideoGameService.getAllGames();
-                const gamesWithDefaults: IGame[] = response.data.map((game: any) => ({
+                const gamesWithDefaults: IGameDetails[] = response.data.map((game: any) => ({
                     ...game,
                     youtubeLink: '',
-                    image: null
+                    image: game.imageUrl
                 }));
                 setAllGames(gamesWithDefaults);
             } catch (error) {
@@ -56,7 +58,7 @@ const Home: React.FC = () => {
     const logOut = async () => {
         try {
             localStorage.removeItem('token');
-            localStorage.removeItem('cart');
+            clearCart();
             redirection('/login');
         } catch (error) {
             console.error('Došlo je do greške:', error);
