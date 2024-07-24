@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './VideoGameList.css';
 import VideoGameCard from '../Card for video game/VideoGameCard';
-import { IGame } from '../../interfaces/IGame';
+import { IGameDetails } from '../../interfaces/IGameDetails';
 import { ICategory } from '../../interfaces/ICategory';
 
 interface Props {
   categories: ICategory[];
-  videoGames: IGame[];
+  videoGames: IGameDetails[];
 }
 
 const VideoGameList: React.FC<Props> = ({ categories, videoGames }) => {
