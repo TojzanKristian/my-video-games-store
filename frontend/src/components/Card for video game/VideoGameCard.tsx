@@ -3,10 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './VideoGameCard.css';
 import { useCart } from '../Cart context/CartContext';
-import { IGame } from '../../interfaces/IGame';
+import { IGameDetails } from '../../interfaces/IGameDetails';
 
 interface Props {
-  game: IGame
+  game: IGameDetails
 }
 
 const VideoGameCard: React.FC<Props> = ({ game }) => {
@@ -27,7 +27,7 @@ const VideoGameCard: React.FC<Props> = ({ game }) => {
 
   return (
     <div className="card video-game-card">
-      <img src={'/cs2.jpg'} className="card-img-top" alt={game.name} />
+      <img src={game.image} className="card-img-top" alt={game.name} />
       <div className="card-body text-center">
         <h5 className="card-title">{game.name}</h5>
       </div>
