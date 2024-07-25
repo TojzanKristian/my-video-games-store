@@ -36,35 +36,41 @@ The administrator has the following options:
 
 ## Illustration of the pages through images
 * **Home page**:
-
+![Home](https://github.com/user-attachments/assets/5141f4bb-8561-4df8-b63b-3fb7a971a6c6)
 * **Video game details page**:
-
+![VideoGamesDetails](https://github.com/user-attachments/assets/9b24836d-678f-434e-9c91-0e99f625ea60)
 * **Login page**:
-
+![Login](https://github.com/user-attachments/assets/03ebce7c-ef88-45be-8adf-c761e0996def)
 * **Registration page**:
-
+![Registration](https://github.com/user-attachments/assets/36a45a72-f3ad-4776-8f24-b7e4a6a21d21)
 * **User profile page**:
-
+![Profile](https://github.com/user-attachments/assets/d0b83bf7-066f-4d4b-8aba-ca453739d6aa)
 * **My games**:
-
+![MyGames](https://github.com/user-attachments/assets/783120e9-0d34-4f08-8406-57a66e33a214)
 * **Edit profile page**:
-
+![EditProfile](https://github.com/user-attachments/assets/d3a39284-8a53-47bd-879c-6f9dbd42e3e5)
 * **Cart page**:
-
+![Cart](https://github.com/user-attachments/assets/b23c8ac4-5612-4ba8-a120-44edf8206c3c)
 * **All users page**:
-
+![AllUsers](https://github.com/user-attachments/assets/021f9d99-2d6b-4297-bcff-6a43f8358f90)
 * **All games page**:
-
+![AllGames](https://github.com/user-attachments/assets/fdbeac2c-839d-4c62-a7aa-053bfc6dcbbd)
 * **All purchases page**:
-
+![AllPurchases](https://github.com/user-attachments/assets/2df54ec2-9850-4cee-9f95-f0ff519d71d5)
 * **Add new video game page**:
-
+![AddNewGame](https://github.com/user-attachments/assets/ab66a46c-2208-4e95-9c5f-b92adee57999)
 
 ## Used technologies
 1. _React with TypeScript_ - The frontend part of the application
 2. _ASP.NET Core Web API_ - The backend part of the application
 3. _Microsoft SQL Server_ - The part of the application responsible for the database
 4. _SQL Server Management Studio (SSMS)_ - Used for displaying and modifying data in database
+
+## Deployment overview of the application on AWS
+1. The _frontend_ part of the application was deployed to **AWS Amplify**
+2. The _backend_ part of the application was deployed to **EC2 (Elastic Compute Cloud)**
+3. The database, which is _SQL Server_, was deployed to **RDS (Relational Database Service)**
+4. The images are stored in an **S3 (Simple Storage Service) bucket**
 
 ## Installation
 ### The steps to create the application in the _frontend_ folder are as follows:
@@ -94,3 +100,9 @@ It can be found at the following link: https://www.microsoft.com/en-us/sql-serve
 The second step is to download and install _SQL Server Management Studio (SSMS)_.<br/>
 It can be found at the following link: https://shorturl.at/OZUU8<br/>
 If you need assistance, watch the video: https://www.youtube.com/watch?v=iaUXjTL_F9U<br/>
+
+### The steps to configure AWS deployment for the application
+The first step is to create an AWS account here: https://signin.aws.amazon.com/signup?request_type=register<br/>
+The second step is to log in to your AWS account.<br/>
+The third step is to add the **AWS Toolkit** to _Visual Studio_.<br/>
+If you need assistance, watch the video: https://www.youtube.com/watch?v=uvJEpvDkuNc
