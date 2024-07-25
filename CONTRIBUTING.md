@@ -33,3 +33,11 @@
     * https://openai.com/blog/chatgpt
 
 ### Resources used for _Amazon Web Services (AWS)_:
+ * _AWS Amplify_:
+    * https://www.youtube.com/watch?v=lHgxFfioaR4
+ * _AWS RDS_ (Relational Database Service):
+    * https://www.youtube.com/watch?v=vp_uulb5phM&t=216s
+ * _AWS S3_ (Simple Storage Service):
+    * https://www.youtube.com/watch?v=2q5jA813ZiI
+  * _AWS EC2_ (Elastic Compute Cloud):
+    * https://www.youtube.com/watch?v=-ZO0_SBUT2E
